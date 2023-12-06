@@ -13,10 +13,8 @@ const firebaseConfig = {
   measurementId: "G-42G24Y5T7N"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
 
 export default auth;
