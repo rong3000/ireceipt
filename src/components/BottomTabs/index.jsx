@@ -2,8 +2,8 @@ import React from 'react';
 import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const BottomTabs = () => {
   const [value, setValue] = React.useState(0);
@@ -15,8 +15,8 @@ const BottomTabs = () => {
           setValue(newValue);
         }}>
         <BottomNavigationAction label="Home" component={Link} to="/" icon={<HomeIcon />} />
-        <BottomNavigationAction label="Inbox" component={Link} to="/inbox" icon={<InboxIcon />} />
-        <BottomNavigationAction label="Drafts" component={Link} to="/drafts" icon={<DraftsIcon />} />
+        <BottomNavigationAction label="Receipts" component={Link} to="/receipts" icon={<ReceiptIcon />} />
+        <BottomNavigationAction label="Settings" component={Link} to="/settings" icon={<SettingsIcon />} />
       </BottomNavigation>
     </Paper>
   );

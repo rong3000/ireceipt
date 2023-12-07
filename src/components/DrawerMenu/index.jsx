@@ -2,8 +2,8 @@ import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
+import ReceiptIcon from '@mui/icons-material/Inbox';
+import SettingsIcon from '@mui/icons-material/Drafts';
 
 const DrawerMenu = ({ open, onClose }) => {
   return (
@@ -15,17 +15,17 @@ const DrawerMenu = ({ open, onClose }) => {
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
-        <ListItem button component={Link} to="/inbox" onClick={onClose}>
+        <ListItem button component={Link} to="/receipts" onClick={onClose}>
           <ListItemIcon>
-            <InboxIcon />
+            <ReceiptIcon />
           </ListItemIcon>
-          <ListItemText primary="Inbox" />
+          <ListItemText primary="Receipts" />
         </ListItem>
-        <ListItem button component={Link} to="/drafts" onClick={onClose}>
+        <ListItem button component={Link} to="/settings" onClick={onClose}>
           <ListItemIcon>
-            <DraftsIcon />
+            <SettingsIcon />
           </ListItemIcon>
-          <ListItemText primary="Drafts" />
+          <ListItemText primary="Settings" />
         </ListItem>
       </List>
     </Drawer>
