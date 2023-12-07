@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import DrawerMenu from '../DrawerMenu';
 import Home from '../Home';
 import Inbox from '../Inbox';
-import Drafts from '../Drafts';
+import SignIn from '../SignIn';
 
 import { AppBar, Toolbar, Typography, ListItemIcon } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -33,7 +33,7 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/inbox" element={<Inbox />} />
-        <Route path="/drafts" element={<Drafts />} />
+        <Route path="/drafts" element={<SignIn />} />
       </Routes>
 
       <BottomTabs/>
