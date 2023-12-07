@@ -55,10 +55,7 @@ const Login = ({ isLoggedIn, user, count, login, logout }) => {
           </div>
         </>
       ) : (
-        <>
           <h2>Please log in</h2>
-          <button onClick={handleLogin}>Login</button>
-        </>
       )}
     </div>
   );

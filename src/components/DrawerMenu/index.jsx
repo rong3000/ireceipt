@@ -1,11 +1,29 @@
+import { connect } from 'react-redux'
+
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
-import ReceiptIcon from '@mui/icons-material/Inbox';
-import SettingsIcon from '@mui/icons-material/Drafts';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import SettingsIcon from '@mui/icons-material/Settings';
 
-const DrawerMenu = ({ open, onClose }) => {
+import { login, logout } from '../../redux/actions/authActions';
+
+const DrawerMenu = ({ open, onClose, user, isLoggedIn, login, logout }) => {
+
+  const handleLogout = () => {
+    logout();
+    onClose();
+  };
+
+  const handleLogin = () => {
+    const USERNAME = process.env.REACT_APP_USERNAME
+    const PASSWORD = process.env.REACT_APP_PASSWORD
+    console.log('username is ', USERNAME)
+    login(USERNAME, PASSWORD);
+    onClose();
+  };
+
   return (
     <Drawer open={open} onClose={onClose}>
       <List>
@@ -27,9 +45,25 @@ const DrawerMenu = ({ open, onClose }) => {
           </ListItemIcon>
           <ListItemText primary="Settings" />
         </ListItem>
+        {
+          isLoggedIn ?
+            <ListItem button onClick={handleLogout}>
+              <ListItemText primary="Log Out" />
+            </ListItem>
+            :
+            <ListItem button onClick={handleLogin}>
+              <ListItemText primary="Log In" />
+            </ListItem>
+        }
+
       </List>
     </Drawer>
   );
 };
 
-export default DrawerMenu;
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.authx.isLoggedIn,
+  user: state.authx.user
+});
+
+export default connect(mapStateToProps, { login, logout })(DrawerMenu);
