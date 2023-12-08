@@ -10,7 +10,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const selectImage = async () => {
-    console.log('camera clicked')
+    navigate('/camera', { replace: true });
   };
 
   return (
