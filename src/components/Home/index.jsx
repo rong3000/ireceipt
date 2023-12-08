@@ -1,11 +1,34 @@
-import React from 'react';
+import { connect } from 'react-redux';
 
-const Home = () => {
+import { useNavigate } from 'react-router-dom';
+
+import Tile from './Tile';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+
+const HomePage = () => {
+
+  const navigate = useNavigate();
+
+  const selectImage = async () => {
+    console.log('camera clicked')
+  };
+
   return (
     <div>
-      Home
+      <Tile onClick={selectImage} post={
+        {
+          description: 'Snap Your Receipt',
+          title: 'Please Snap Your Receipt'
+        }
+      } icon={<CameraAltIcon sx={{ fontSize: 72 }} />}>
+      </Tile>
     </div>
   );
 };
 
-export default Home;
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.authx.isLoggedIn,
+  user: state.authx.user
+});
+
+export default connect(mapStateToProps, {})(HomePage)
