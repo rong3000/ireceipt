@@ -14,7 +14,11 @@ import { PhotoCamera } from '@mui/icons-material';
 
 import CardActionArea from '@mui/material/CardActionArea';
 import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux'
 
+const ServiceBaseUrl = process.env.REACT_APP_SERVER
+
+const UploadReceiptImages = ServiceBaseUrl + "Receipt/UploadReceiptImages/0";
 
 function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
   return centerCrop(
@@ -32,7 +36,7 @@ function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
   );
 }
 
-export default function ImagePicker() {
+function ImagePicker({user}) {
   const [imgSrc, setImgSrc] = useState('');
   const previewCanvasRef = useRef(null);
   const imgRef = useRef(null);
@@ -87,6 +91,7 @@ export default function ImagePicker() {
       }
       blobUrlRef.current = URL.createObjectURL(blob);
       hiddenAnchorRef.current.href = blobUrlRef.current;
+      console.log(hiddenAnchorRef.current.href);
       hiddenAnchorRef.current.click();
     });
   }
@@ -112,6 +117,10 @@ export default function ImagePicker() {
     [completedCrop, scale, rotate]
   );
 
+  function getAPIVersion() {
+    return "0.1";
+  }
+
   function handleToggleAspectClick() {
     if (aspect) {
       setAspect(undefined);
@@ -123,6 +132,72 @@ export default function ImagePicker() {
       setCompletedCrop(convertToPixelCrop(newCrop, width, height));
     }
   }
+
+  const handleConfirmClick = async () => {
+    if (!previewCanvasRef.current) {
+      return;
+    }
+
+    const croppedCanvas = previewCanvasRef.current;
+    const blob = await new Promise((resolve) => {
+      croppedCanvas.toBlob((blob) => {
+        resolve(blob);
+      });
+    });
+    try {
+      
+      const headers = new Headers();
+      headers.append("api-version", getAPIVersion());
+      const accessToken = user?.accessToken;
+
+      if (accessToken) {
+        headers.set('Authorization', `Bearer ${accessToken}`);
+      }
+      // headers.append("Authorization", "Bearer " + token);
+
+      const file = new File([blob], "receipt.png", {
+        type: blob.type,
+      });
+
+      console.log('file is ', file);
+
+      const formData = new FormData();
+      formData.append("file", file, file.name);
+
+      const requestOptions = {
+        method: "POST",
+        headers: headers,
+        body: formData
+      };
+
+      const response = await fetch(UploadReceiptImages, requestOptions);
+      console.log(response.status);
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log('data is ', data);
+        return data;
+      } else {
+        return {
+          msgCode: response.status,
+          msg: "HTTP response code: " + response.status.toString(),
+        }
+      }
+    } catch (error) {
+      if (error.name === "TimeoutError") {
+        return {
+          msgCode: 9000,
+          msg: "Time out!",
+        }
+      } else {
+        // Log an error
+        return {
+          msgCode: -1,
+          msg: error.toString(),
+        }
+      }
+    }
+
+  };
 
   return (
     <div className="App">
@@ -146,7 +221,7 @@ export default function ImagePicker() {
             </Button>
           </label>
           <div>
-            <Button onClick={onDownloadCropClick}>Confirm</Button>
+            <Button onClick={handleConfirmClick}>Confirm</Button>
             <a
               ref={hiddenAnchorRef}
               download
@@ -160,6 +235,8 @@ export default function ImagePicker() {
             </a>
           </div>
           <Button onClick={handleCancel}>Cancel</Button>
+          <Button onClick={onDownloadCropClick}>Download</Button>
+          
         </Box>
       </div>
       {!!imgSrc && (
@@ -197,3 +274,11 @@ export default function ImagePicker() {
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.authx.isLoggedIn,
+  user: state.authx.user
+});
+
+export default connect(mapStateToProps, { })(ImagePicker);
+
