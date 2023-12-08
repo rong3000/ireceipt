@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import DrawerMenu from '../DrawerMenu';
 import Home from '../Home';
 import Receipts from '../Receipts';
@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import BottomTabs from '../BottomTabs';
 import { login, logout } from '../../redux/actions/authActions'
+import Login from '../Login'
 
 const App = ({ isLoggedIn, user, login, logout }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -21,11 +22,14 @@ const App = ({ isLoggedIn, user, login, logout }) => {
     setDrawerOpen(!drawerOpen);
   };
 
-  const handleLogin = () => {
+  const navigate = useNavigate();
 
-    const USERNAME = process.env.REACT_APP_USERNAME
-    const PASSWORD = process.env.REACT_APP_PASSWORD
-    login(USERNAME, PASSWORD);
+  const redirectToLogin = () => {
+    navigate('/login/', { replace: true });
+  };
+
+  const handleLogin = () => {
+    redirectToLogin();
   };
 
   const handleLogout = () => {
@@ -43,8 +47,9 @@ const App = ({ isLoggedIn, user, login, logout }) => {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
+              onClick={toggleDrawer} 
             >
-              <MenuIcon onClick={toggleDrawer} />
+              <MenuIcon />
             </IconButton>
             {
               isLoggedIn ?
@@ -67,6 +72,7 @@ const App = ({ isLoggedIn, user, login, logout }) => {
         <Route exact path="/" element={<Home />} />
         <Route path="/receipts" element={<Receipts />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
 
       <BottomTabs />

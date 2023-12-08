@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -11,17 +11,20 @@ import { login, logout } from '../../redux/actions/authActions';
 
 const DrawerMenu = ({ open, onClose, user, isLoggedIn, login, logout }) => {
 
+  const navigate = useNavigate();
+
+  const redirectToLogin = () => {
+    navigate('/login/', { replace: true });
+    onClose();
+  };
+
   const handleLogout = () => {
     logout();
     onClose();
   };
 
   const handleLogin = () => {
-    const USERNAME = process.env.REACT_APP_USERNAME
-    const PASSWORD = process.env.REACT_APP_PASSWORD
-    console.log('username is ', USERNAME)
-    login(USERNAME, PASSWORD);
-    onClose();
+    redirectToLogin();
   };
 
   return (
