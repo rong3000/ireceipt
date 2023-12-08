@@ -13,6 +13,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { connect } from 'react-redux';
+import { login, logout } from '../../redux/actions/authActions';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -30,7 +34,10 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+function SignIn({ isLoggedIn, user, login, logout }) {
+  
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -38,6 +45,9 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
+
+    login(data.get('email'), data.get('password'));
+    navigate('/', { replace: true });
   };
 
   return (
@@ -110,3 +120,10 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
+
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.authx.isLoggedIn,
+  user: state.authx.user
+});
+
+export default connect(mapStateToProps, { login, logout })(SignIn)
