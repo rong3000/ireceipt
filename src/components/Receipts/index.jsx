@@ -37,7 +37,11 @@ const Receipts = ({ isLoggedIn }) => {
             {isLoading ? (
               <div>Loading...</div>
             ) : error ? (
-              <div>Error: {error.message}</div>
+              <div>
+                (error.status == '401')?
+                <div>Authentication expired, please log in again.</div>:
+                <div></div>
+              </div>
             ) : data ? (
               <Container>
                 <ImageList

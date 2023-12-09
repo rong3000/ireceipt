@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 const BottomTabs = () => {
+  const location = useLocation();
   const [value, setValue] = React.useState(0);
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      setValue(0);
+    } else if (location.pathname === '/receipts') {
+      setValue(1);
+    } else if (location.pathname === '/settings') {
+      setValue(2);
+    }
+  }, [location]);
 
   return (
     <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
