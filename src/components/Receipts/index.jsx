@@ -9,15 +9,17 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Button from '@mui/material/Button';
 
+import dayjs from 'dayjs';
+import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 import {
   Avatar,
   Card,
   Container,
-  Rating,
   Tooltip,
+  CardActionArea
 } from '@mui/material';
-import { StarBorder } from '@mui/icons-material';
-
 
 const Receipts = ({ isLoggedIn }) => {
 
@@ -32,6 +34,11 @@ const Receipts = ({ isLoggedIn }) => {
 
   const handleLogin = () => {
     navigate('/login/', { replace: true });
+  };
+
+  const onReceiptClick = (item) => {
+    console.log('Receipt Clicked', item);
+    navigate('/edit', { state: { item }, replace: true });
   };
 
   if (!isLoggedIn) {
@@ -60,14 +67,16 @@ const Receipts = ({ isLoggedIn }) => {
                   }}
                 >
                   {data.obj.map((item) => (
-                    <Card key={item.id}>
+                      <CardActionArea key={item.id} component="a" onClick={() => onReceiptClick(item)}>
+
+                        <Card>
                       <ImageListItem sx={{ height: '100% !important' }}>
                         <ImageListItemBar
                           sx={{
                             background:
                               'linear-gradient(to bottom, rgba(0,0,0,0.7)0%, rgba(0,0,0,0.3)70%, rgba(0,0,0,0)100%)',
                           }}
-                          title={item.totalAmount === 0 ? 'Free Stay' : '$' + item.totalAmount}
+                              title={item.totalAmount === 0 ? '$0' : '$' + item.totalAmount}
                           actionIcon={
                             <Tooltip title={item.companyName} sx={{ mr: '5px' }}>
                               <Avatar src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`} />
@@ -84,19 +93,15 @@ const Receipts = ({ isLoggedIn }) => {
                         <ImageListItemBar
                           title={item.companyName}
                           actionIcon={
-                            <Rating
-                              sx={{ color: 'rgba(255,255,255, 0.8)', mr: '5px' }}
-                              name="item-rating"
-                              defaultValue={3.5}
-                              precision={0.5}
-                              emptyIcon={
-                                <StarBorder sx={{ color: 'rgba(255,255,255, 0.8)' }} />
-                              }
-                            />
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <MobileDatePicker value={dayjs(item.receiptDatetime)} readOnly />
+                                </LocalizationProvider>
                           }
                         />
                       </ImageListItem>
                     </Card>
+                      </CardActionArea>
+
                   ))}
                 </ImageList>
               </Container>
@@ -104,8 +109,7 @@ const Receipts = ({ isLoggedIn }) => {
         </div>
 
       ) : (
-        <>
-        </>
+        <div>Not logged in yet and please <Button color="primary" onClick={handleLogin}>Log In</Button></div>
       )}
     </div>
   )
@@ -116,4 +120,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {})(Receipts);
-

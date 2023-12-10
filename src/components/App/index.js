@@ -6,6 +6,7 @@ import DrawerMenu from '../DrawerMenu';
 import Home from '../Home';
 import Receipts from '../Receipts';
 import Settings from '../Settings';
+import EditReceipt from '../Receipts/EditReceipt';
 
 import { AppBar, Box, Toolbar, Typography, Button, IconButton } from '@mui/material';
 
@@ -75,7 +76,7 @@ const App = ({ isLoggedIn, user, login, logout }) => {
         <Route path="/settings" element={<Settings />} />
         <Route path="/login" element={<Login />} />
         <Route path="/camera" element={<ImagePicker />} />
-
+        <Route path="/edit" element={<EditReceipt />} />
       </Routes>
 
       <BottomTabs />
