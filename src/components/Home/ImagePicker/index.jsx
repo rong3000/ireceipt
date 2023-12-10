@@ -235,8 +235,6 @@ function ImagePicker({user}) {
             </a>
           </div>
           <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={onDownloadCropClick}>Download</Button>
-          
         </Box>
       </div>
       {!!imgSrc && (

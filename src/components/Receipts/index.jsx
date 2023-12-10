@@ -1,10 +1,13 @@
 import { connect } from 'react-redux'
 
+import { useNavigate } from 'react-router-dom';
+
 import { useGetReceiptsQuery } from '../../datamodel/rtkQuerySlice';
 
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
+import Button from '@mui/material/Button';
 
 import {
   Avatar,
@@ -25,24 +28,28 @@ const Receipts = ({ isLoggedIn }) => {
     }
   );
 
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate('/login/', { replace: true });
+  };
+
   if (!isLoggedIn) {
-    return <div>Not logged in yet and {isUninitialized.toString()}</div>
+    return <div>Not logged in yet and please <Button color="primary" onClick={handleLogin}>Log In</Button></div>
   }
 
   return (
     <div>
       {isLoggedIn ? (
-        <>
-          <div>
-            {isLoading ? (
-              <div>Loading...</div>
-            ) : error ? (
-              <div>
-                (error.status == '401')?
-                <div>Authentication expired, please log in again.</div>:
-                <div></div>
-              </div>
-            ) : data ? (
+
+        <div>
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : error ?
+            (error.status === 401 ?
+              <div>Authentication expired, please <Button color="primary" onClick={handleLogin}>Log In</Button> again.</div> :
+              <div>Other error</div>)
+            : data ? (
               <Container>
                 <ImageList
                   gap={12}
@@ -94,8 +101,8 @@ const Receipts = ({ isLoggedIn }) => {
                 </ImageList>
               </Container>
             ) : null}
-          </div>
-        </>
+        </div>
+
       ) : (
         <>
         </>
