@@ -23,6 +23,13 @@ export const api = createApi({
     getReceipts: builder.query({
       query: () => '/Receipt/GetReceipts',
     }),
+    updateReceipt: builder.mutation({
+      query: (receiptData) => ({
+        url: '/Receipt/UpdateReceipt',
+        method: 'POST',
+        body: receiptData,
+      }),
+    }),
     uploadReceipt: builder.mutation({
       query: (formData) => ({
         url: '/Receipt/UploadReceiptImages/0',
@@ -33,4 +40,4 @@ export const api = createApi({
   }),
 });
 
-export const { useGetReceiptsQuery, useUploadReceiptMutation } = api;
+export const { useGetReceiptsQuery, useUpdateReceiptMutation, useUploadReceiptMutation } = api;
