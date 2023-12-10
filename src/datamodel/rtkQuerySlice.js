@@ -13,7 +13,6 @@ export const api = createApi({
           headers.set('Authorization', `Bearer ${accessToken}`);
         }
 
-        headers.set('Content-Type', 'application/json');
         headers.set('api-version', '0.1');
 
         return headers;

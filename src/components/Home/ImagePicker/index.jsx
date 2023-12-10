@@ -9,16 +9,13 @@ import { useDebounceEffect } from './useDebounceEffect';
 
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { Card, CardContent, Typography, IconButton, Stack, Box, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 
-import CardActionArea from '@mui/material/CardActionArea';
 import { useNavigate } from 'react-router-dom';
-import { connect } from 'react-redux'
-
-const ServiceBaseUrl = process.env.REACT_APP_SERVER
-
-const UploadReceiptImages = ServiceBaseUrl + "Receipt/UploadReceiptImages/0";
+import { connect } from 'react-redux';
+import { CircularProgress, Modal } from '@mui/material';
+import { useUploadReceiptMutation } from '../../../datamodel/rtkQuerySlice';
 
 function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
   return centerCrop(
@@ -36,7 +33,13 @@ function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
   );
 }
 
-function ImagePicker({user}) {
+function ImagePicker({ user }) {
+  const [uploadReceipt, { data, error, isLoading, isSuccess, isError }] = useUploadReceiptMutation();
+
+  const [isProgressing, setIsProgressing] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
   const [imgSrc, setImgSrc] = useState('');
   const previewCanvasRef = useRef(null);
   const imgRef = useRef(null);
@@ -55,8 +58,14 @@ function ImagePicker({user}) {
   }
 
   useEffect(() => {
-    // Programmatically trigger the click event of the file input
+    // Programmatically trigger the click event of the file input with a slight delay
+    let timeout = setTimeout(() => {
     fileInputRef.current.click();
+    }, 100);
+
+    return () => {
+      clearTimeout(timeout)
+    }
   }, []);
 
   function onSelectFile(e) {
@@ -134,6 +143,9 @@ function ImagePicker({user}) {
   }
 
   const handleConfirmClick = async () => {
+
+    setIsProgressing(true);
+
     if (!previewCanvasRef.current) {
       return;
     }
@@ -144,19 +156,9 @@ function ImagePicker({user}) {
         resolve(blob);
       });
     });
-    try {
-      
-      const headers = new Headers();
-      headers.append("api-version", getAPIVersion());
-      const accessToken = user?.accessToken;
-
-      if (accessToken) {
-        headers.set('Authorization', `Bearer ${accessToken}`);
-      }
-      // headers.append("Authorization", "Bearer " + token);
 
       const file = new File([blob], "receipt.png", {
-        type: blob.type,
+      type: blob?.type,
       });
 
       console.log('file is ', file);
@@ -164,39 +166,32 @@ function ImagePicker({user}) {
       const formData = new FormData();
       formData.append("file", file, file.name);
 
-      const requestOptions = {
-        method: "POST",
-        headers: headers,
-        body: formData
-      };
+    if (user) {
+      uploadReceipt(formData).unwrap().then(
+        () => {
+          setIsProgressing(false);
 
-      const response = await fetch(UploadReceiptImages, requestOptions);
-      console.log(response.status);
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log('data is ', data);
-        return data;
+          setIsSuccessModalOpen(true);
+          console.log(`${isSuccess} and ${data}`);
+        }
+      ).catch((error) => {
+        setIsProgressing(false);
+
+        setIsErrorModalOpen(true); // Open error modal
+      });
       } else {
-        return {
-          msgCode: response.status,
-          msg: "HTTP response code: " + response.status.toString(),
-        }
-      }
-    } catch (error) {
-      if (error.name === "TimeoutError") {
-        return {
-          msgCode: 9000,
-          msg: "Time out!",
-        }
-      } else {
-        // Log an error
-        return {
-          msgCode: -1,
-          msg: error.toString(),
-        }
-      }
+      navigate('/login', { replace: true });
+
     }
+  };
 
+  const closeErrorModal = () => {
+    setIsErrorModalOpen(false);
+  };
+
+  const closeSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+    navigate('/receipts', { state: { updateSuccess: true } });
   };
 
   return (
@@ -236,6 +231,27 @@ function ImagePicker({user}) {
           </div>
           <Button onClick={handleCancel}>Cancel</Button>
         </Box>
+        <Modal open={isProgressing}>
+          <div className="modal-content">
+            <CircularProgress />
+          </div>
+        </Modal>
+
+        <Modal open={isErrorModalOpen}>
+          <div className="modal-content">
+            <h2>Error</h2>
+            <p>{isError ? `${error.status} ${JSON.stringify(error.data)}` : 'An error occurred.'}</p>
+            <Button onClick={closeErrorModal}>Close</Button>
+          </div>
+        </Modal>
+
+        <Modal open={isSuccessModalOpen}>
+          <div className="modal-content">
+            <h2>Success</h2>
+            <p>Receipt Uploaded Successfully</p>
+            <Button onClick={closeSuccessModal}>Close</Button>
+          </div>
+        </Modal>
       </div>
       {!!imgSrc && (
         <ReactCrop
