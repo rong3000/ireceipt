@@ -17,6 +17,7 @@ import { login, logout } from '../../redux/actions/authActions'
 import Login from '../Login'
 import ImagePicker from '../Home/ImagePicker'
 import NotFoundPage from './NotFoundPage'
+import SignUp from '../SignUp';
 
 const App = ({ isLoggedIn, user, login, logout }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -78,6 +79,7 @@ const App = ({ isLoggedIn, user, login, logout }) => {
         <Route path="/login" element={<Login />} />
         <Route path="/camera" element={<ImagePicker />} />
         <Route path="/edit" element={<EditReceipt />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
