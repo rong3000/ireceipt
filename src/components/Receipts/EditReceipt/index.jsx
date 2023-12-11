@@ -8,7 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {
-Box,
+  Box,
   OutlinedInput,
   InputLabel,
   InputAdornment,
@@ -73,7 +73,7 @@ export default function EditReceipt() {
     <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
       {item ? (
         // Render content when itemId is available
-        <div>
+        <div aria-label='form'>
           <Button onClick={handleConfirmClick}>Confirm</Button>
           <Button onClick={handleCancel}>Cancel</Button>
           <div>
@@ -107,13 +107,12 @@ export default function EditReceipt() {
               }}
             />
             <Card>
-              <ImageListItem sx={{ height: '100% !important' }}>
-                <img
-                  src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`}
-                  alt={item.companyName}
-                  loading="lazy"
-                                />
-              </ImageListItem>
+              <img
+                src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`}
+                alt={item.companyName}
+                loading="lazy"
+                style={{ width: '100%' }}
+              />
             </Card>
           </div>
         </div>
