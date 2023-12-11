@@ -60,7 +60,7 @@ function ImagePicker({ user }) {
   useEffect(() => {
     // Programmatically trigger the click event of the file input with a slight delay
     let timeout = setTimeout(() => {
-    fileInputRef.current.click();
+      fileInputRef.current.click();
     }, 100);
 
     return () => {
@@ -126,10 +126,6 @@ function ImagePicker({ user }) {
     [completedCrop, scale, rotate]
   );
 
-  function getAPIVersion() {
-    return "0.1";
-  }
-
   function handleToggleAspectClick() {
     if (aspect) {
       setAspect(undefined);
@@ -157,14 +153,14 @@ function ImagePicker({ user }) {
       });
     });
 
-      const file = new File([blob], "receipt.png", {
+    const file = new File([blob], "receipt.png", {
       type: blob?.type,
-      });
+    });
 
-      console.log('file is ', file);
+    console.log('file is ', file);
 
-      const formData = new FormData();
-      formData.append("file", file, file.name);
+    const formData = new FormData();
+    formData.append("file", file, file.name);
 
     if (user) {
       uploadReceipt(formData).unwrap().then(
@@ -179,7 +175,7 @@ function ImagePicker({ user }) {
 
         setIsErrorModalOpen(true); // Open error modal
       });
-      } else {
+    } else {
       navigate('/login', { replace: true });
 
     }
@@ -191,7 +187,16 @@ function ImagePicker({ user }) {
 
   const closeSuccessModal = () => {
     setIsSuccessModalOpen(false);
-    navigate('/receipts', { state: { updateSuccess: true } });
+    // navigate('/receipts', { state: { updateSuccess: true } });
+    let origItem = {
+      ...data.obj[0]
+    };
+    let keysToRemove = ['decodedContent', 'extractedContent', 'image', 'imageFileExtension', 'productIds', 'statusName', 'statusUpdateDatetime', 'submittedContent'];
+    let item = (({ [keysToRemove[0]]: _, [keysToRemove[1]]: __, [keysToRemove[2]]: ___, [keysToRemove[3]]: ____, [keysToRemove[4]]: _____, [keysToRemove[5]]: ______, [keysToRemove[6]]: _______, [keysToRemove[7]]: ________, ...rest }) => rest)(origItem);
+
+    console.log('truncated is ', item);
+    // console.log(`data is ${JSON.stringify(data)}`);
+    navigate('/edit', { state: { item }, replace: true });
   };
 
   return (
@@ -295,4 +300,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { })(ImagePicker);
-
