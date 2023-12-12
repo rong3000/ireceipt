@@ -1,6 +1,9 @@
+let user = JSON.parse(localStorage.getItem('user'));
+
 const initialState = {
-    user: null,
-    isLoggedIn: false
+    user: user || null,
+    isLoggedIn: localStorage.getItem('isLoggedIn') === 'true' || false,
+    error: null
 };
 
 export default function authReducer(state = initialState, action) {
@@ -8,12 +11,12 @@ export default function authReducer(state = initialState, action) {
         case 'LOGIN_SUCCESS':
             return {
                 ...state,
-                user: action.payload, //action.payload or action.data
+                user: action.payload,
                 isLoggedIn: true,
             };
         case 'LOGIN_FAILED':
             return {
-                error: action.payload, //action.payload or action.data
+                error: action.payload,
                 isLoggedIn: false,
             };
         case 'LOGOUT_SUCCESS':
@@ -31,7 +34,7 @@ export default function authReducer(state = initialState, action) {
             case 'SIGNUP_SUCCESS':
                 return {
                     ...state,
-                    user: action.payload, //action.payload or action.data
+                    user: action.payload,
                     isLoggedIn: true,
                 };
             case 'SIGNUP_FAILED':

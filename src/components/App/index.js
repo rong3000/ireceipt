@@ -17,7 +17,7 @@ import { login, logout } from '../../redux/actions/authActions'
 import Login from '../Login'
 import ImagePicker from '../Home/ImagePicker'
 import NotFoundPage from './NotFoundPage'
-import SignUp from '../SignUp';
+import SignUp from '../Signup';
 
 const App = ({ isLoggedIn, user, login, logout }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);

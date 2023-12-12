@@ -1,11 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const SERVER = process.env.REACT_APP_SERVER
-
 export const api = createApi({
   baseQuery: fetchBaseQuery(
     {
-      baseUrl: SERVER,
+      baseUrl: 'https://api.ireceipts.au:443',
       prepareHeaders: (headers, { getState }) => {
         const accessToken = getState().authx.user?.accessToken;
 
