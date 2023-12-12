@@ -71,7 +71,7 @@ export default function EditReceipt() {
     navigate('/receipts', { replace: true });
   };
 
-  const [date, setDate] = useState(dayjs(item?.receiptDatetime));
+  const [date, setDate] = useState(item?.receiptDatetime == "0001-01-01T00:00:00" ? dayjs() : dayjs(item?.receiptDatetime));
   const [amount, setAmount] = useState(item?.totalAmount);
   const [name, setName] = useState(item?.companyName);
 
@@ -115,7 +115,7 @@ export default function EditReceipt() {
             <Card>
               <img
                 src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`}
-                alt={item.companyName}
+                alt={item?.companyName ? item.companyName : 'Placeholder'}
                 loading="lazy"
                 style={{ width: '100%' }}
               />

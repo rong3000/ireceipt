@@ -85,7 +85,7 @@ const Receipts = ({ isLoggedIn, authInit }) => {
                           <Tooltip title={item.companyName} sx={{ mr: '5px' }}>
                             <Avatar
                               src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`}
-                              alt={item.companyName}
+                              alt={item?.companyName ? item.companyName : 'Placeholder'}
                             />
                           </Tooltip>
                         }
@@ -93,7 +93,7 @@ const Receipts = ({ isLoggedIn, authInit }) => {
                       />
                       <img
                         src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`}
-                        alt={item.companyName}
+                        alt={item?.companyName ? item.companyName : 'Placeholder'}
                         loading="lazy"
                         style={{ cursor: 'pointer' }}
                       />
