@@ -42,8 +42,8 @@ const App = ({ isLoggedIn, user, login, logout }) => {
 
   return (
     <div>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+      <Box sx={{ flexGrow: 1 }}>              
+        <AppBar position="static" aria-label="appbar">
           <Toolbar>
             <IconButton
               size="large"
