@@ -100,7 +100,6 @@ function ImagePicker({ user }) {
       }
       blobUrlRef.current = URL.createObjectURL(blob);
       hiddenAnchorRef.current.href = blobUrlRef.current;
-      console.log(hiddenAnchorRef.current.href);
       hiddenAnchorRef.current.click();
     });
   }
@@ -157,8 +156,6 @@ function ImagePicker({ user }) {
       type: blob?.type,
     });
 
-    console.log('file is ', file);
-
     const formData = new FormData();
     formData.append("file", file, file.name);
 
@@ -168,7 +165,6 @@ function ImagePicker({ user }) {
           setIsProgressing(false);
 
           setIsSuccessModalOpen(true);
-          console.log(`${isSuccess} and ${data}`);
         }
       ).catch((error) => {
         setIsProgressing(false);
@@ -187,15 +183,12 @@ function ImagePicker({ user }) {
 
   const closeSuccessModal = () => {
     setIsSuccessModalOpen(false);
-    // navigate('/receipts', { state: { updateSuccess: true } });
     let origItem = {
       ...data.obj[0]
     };
     let keysToRemove = ['decodedContent', 'extractedContent', 'image', 'imageFileExtension', 'productIds', 'statusName', 'statusUpdateDatetime', 'submittedContent'];
     let item = (({ [keysToRemove[0]]: _, [keysToRemove[1]]: __, [keysToRemove[2]]: ___, [keysToRemove[3]]: ____, [keysToRemove[4]]: _____, [keysToRemove[5]]: ______, [keysToRemove[6]]: _______, [keysToRemove[7]]: ________, ...rest }) => rest)(origItem);
 
-    console.log('truncated is ', item);
-    // console.log(`data is ${JSON.stringify(data)}`);
     navigate('/edit', { state: { item }, replace: true });
   };
 

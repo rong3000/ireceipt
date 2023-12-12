@@ -18,14 +18,11 @@ const DrawerMenu = ({ open, onClose, user, isLoggedIn, login, logout, authInit }
   };
 
   const handleLogin = () => {
-    // Call the login action with email and password
     redirectToLogin();
-    // login('user@example.com', 'password');
     onClose();
   };
 
   const handleLogout = () => {
-    // logout();
     authInit();
     onClose();
   };

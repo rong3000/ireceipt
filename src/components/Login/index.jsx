@@ -32,7 +32,6 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
@@ -55,7 +54,6 @@ function SignIn({ isLoggedIn, user, login, authInit, error }) {
     if (error) {
       setIsLoading(false);
 
-      console.log(error);
       setIsErrorModalOpen(true);
     }
   }, [isLoggedIn, error]);
@@ -63,10 +61,6 @@ function SignIn({ isLoggedIn, user, login, authInit, error }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
     authInit();
     login(data.get('email'), data.get('password'));
     setIsLoading(true);
@@ -125,11 +119,6 @@ function SignIn({ isLoggedIn, user, login, authInit, error }) {
               Sign In
             </Button>
             <Grid container>
-              {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
               <Grid item>
                 <RouterLink to="/signup" variant="body2">
                   {"Don't have an account? Please Sign Up"}

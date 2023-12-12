@@ -14,8 +14,6 @@ const removeUserDataFromLocalStorage = () => {
 export const login = (email, password) => async (dispatch) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    console.log(userCredential.user.accessToken)
-    console.log(userCredential.user.email)
 
     const user = { email: userCredential.user.email, accessToken: userCredential.user.accessToken };
 
@@ -54,8 +52,6 @@ export const authInit = () => async (dispatch) => {
 export const signup = (email, password) => async (dispatch) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    console.log(userCredential.user.accessToken)
-    console.log(userCredential.user.email)
 
     const user = { email: userCredential.user.email, accessToken: userCredential.user.accessToken };
 

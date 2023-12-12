@@ -29,8 +29,6 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 function SignUp({ isLoggedIn, user, signup, authInit, error }) {
@@ -49,7 +47,6 @@ function SignUp({ isLoggedIn, user, signup, authInit, error }) {
     }
     if (error) {
       setIsLoading(false);
-      console.log(error);
       setIsErrorModalOpen(true);
     }
   }, [isLoggedIn, error]);
@@ -57,10 +54,6 @@ function SignUp({ isLoggedIn, user, signup, authInit, error }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
     authInit();
     signup(data.get('email'), data.get('password'));
     setIsLoading(true);
@@ -86,27 +79,6 @@ function SignUp({ isLoggedIn, user, signup, authInit, error }) {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              {/* <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   required
@@ -128,12 +100,6 @@ function SignUp({ isLoggedIn, user, signup, authInit, error }) {
                   autoComplete="new-password"
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
             </Grid>
             <Button
               type="submit"

@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 
-import { login, logout, authInit } from '../../redux/actions/authActions';//done
+import { login, logout, authInit } from '../../redux/actions/authActions';
 
 import { useGetReceiptsQuery } from '../../datamodel/rtkQuerySlice';
 
@@ -45,7 +45,6 @@ const Receipts = ({ isLoggedIn, authInit }) => {
   };
 
   const onReceiptClick = (item) => {
-    console.log('Receipt Clicked', item);
     navigate('/edit', { state: { item }, replace: true });
   };
 

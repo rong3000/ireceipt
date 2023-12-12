@@ -34,12 +34,6 @@ export default function EditReceipt() {
   const item = location.state?.item;
 
   const handleConfirmClick = () => {
-    console.log(`date is ${date} and receiptDate is ${dayjs(item?.receiptDatetime)}`);
-    console.log((date.isSame(dayjs(item?.receiptDatetime))));
-    console.log(`amount is ${amount} and receiptAmount is ${item?.totalAmount}`);
-    console.log((amount === item?.totalAmount));
-    console.log(`name is ${name} and receiptCompanyName is ${item?.companyName}`);
-    console.log((name === item?.companyName));
     let modifiedData = {
       receiptDatetime: date.format('YYYY-MM-DD[T]hh:mm:ss'),
       totalAmount: amount * 1,
@@ -49,7 +43,6 @@ export default function EditReceipt() {
       ...item,
       ...modifiedData
     };
-    console.log(receiptData);
 
     if ((date.isSame(dayjs(item?.receiptDatetime))) && amount === item?.totalAmount && name === item?.companyName) {
       navigate('/receipts', { replace: true });
@@ -59,7 +52,7 @@ export default function EditReceipt() {
           setIsSuccessModalOpen(true);
         }
       ).catch((error) => {
-        setIsErrorModalOpen(true); // Open error modal
+        setIsErrorModalOpen(true);
       });
     }
   };
