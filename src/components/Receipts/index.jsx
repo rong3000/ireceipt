@@ -57,52 +57,52 @@ const Receipts = ({ isLoggedIn }) => {
               <div>Authentication expired, please <Button color="primary" onClick={handleLogin}>Log In</Button> again.</div> :
               <div>Other error</div>)
             : data ? (
-<Container>
-              <ImageList
-                gap={12}
-                sx={{
-                  mb: 8,
-                  gridTemplateColumns:
-                    'repeat(auto-fill, minmax(280px, 1fr))!important',
-                }}
-              >
-                {data.obj.map((item) => (
-                  <ImageListItem sx={{ height: '100% !important' }} onClick={() => onReceiptClick(item)}>
-                    <ImageListItemBar
-                      sx={{
-                        background:
-                          'linear-gradient(to bottom, rgba(0,0,0,0.7)0%, rgba(0,0,0,0.3)70%, rgba(0,0,0,0)100%)',
-                      }}
-                      title={item.totalAmount === 0 ? '$0' : '$' + item.totalAmount}
-                      actionIcon={
-                        <Tooltip title={item.companyName} sx={{ mr: '5px' }}>
-                          <Avatar
-                            src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`}
-                            alt={item.companyName}
-                          />
-                        </Tooltip>
-                      }
-                      position="top"
-                    />
-                    <img
-                      src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`}
-                      alt={item.companyName}
-                      loading="lazy"
-                      style={{ cursor: 'pointer' }}
-                    />
-                    <ImageListItemBar
-                      title={item.companyName}
-                      actionIcon={
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <MobileDatePicker value={dayjs(item.receiptDatetime)} readOnly />
-                        </LocalizationProvider>
-                      }
-                    />
-                  </ImageListItem>
-                ))}
-              </ImageList>
-</Container>
-            ) : null}
+              <Container>
+                <ImageList
+                  gap={12}
+                  sx={{
+                    mb: 8,
+                    gridTemplateColumns:
+                      'repeat(auto-fill, minmax(280px, 1fr))!important',
+                  }}
+                >
+                  {data.obj?.length > 0 ? data.obj.map((item) => (
+                    <ImageListItem sx={{ height: '100% !important' }} onClick={() => onReceiptClick(item)}>
+                      <ImageListItemBar
+                        sx={{
+                          background:
+                            'linear-gradient(to bottom, rgba(0,0,0,0.7)0%, rgba(0,0,0,0.3)70%, rgba(0,0,0,0)100%)',
+                        }}
+                        title={item.totalAmount === 0 ? '$0' : '$' + item.totalAmount}
+                        actionIcon={
+                          <Tooltip title={item.companyName} sx={{ mr: '5px' }}>
+                            <Avatar
+                              src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`}
+                              alt={item.companyName}
+                            />
+                          </Tooltip>
+                        }
+                        position="top"
+                      />
+                      <img
+                        src={`https://api.ireceipts.au/Receipt/GetImage/${encodeURIComponent(item.imagePath)}`}
+                        alt={item.companyName}
+                        loading="lazy"
+                        style={{ cursor: 'pointer' }}
+                      />
+                      <ImageListItemBar
+                        title={item.companyName}
+                        actionIcon={
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <MobileDatePicker value={dayjs(item.receiptDatetime)} readOnly />
+                          </LocalizationProvider>
+                        }
+                      />
+                    </ImageListItem>
+                  )): <h3>You don't have any receipts.</h3>}
+                </ImageList>
+              </Container>
+            ) : <h3>You don't have any receipts.</h3>}
         </div>
 
       ) : (
