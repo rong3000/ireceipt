@@ -20,10 +20,13 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useUpdateReceiptMutation } from '../../../datamodel/rtkQuerySlice';
+import { CircularProgress, Modal } from '@mui/material';
 
 export default function EditReceipt() {
 
   const [updateReceipt, { data, error, isLoading, isSuccess, isError }] = useUpdateReceiptMutation();
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -53,12 +56,21 @@ export default function EditReceipt() {
     } else {
       updateReceipt(receiptData).unwrap().then(
         () => {
-          console.log('succeeded')
+          setIsSuccessModalOpen(true);
         }
       ).catch((error) => {
-        console.log('error')
+        setIsErrorModalOpen(true); // Open error modal
       });
     }
+  };
+
+  const closeErrorModal = () => {
+    setIsErrorModalOpen(false);
+  };
+
+  const closeSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+    navigate('/receipts', { state: { updateSuccess: true }, replace: true });
   };
 
   const handleCancel = async () => {
@@ -124,6 +136,28 @@ export default function EditReceipt() {
 
         </div>
       )}
+
+      <Modal open={isLoading}>
+        <div className="modal-content">
+          <CircularProgress />
+        </div>
+      </Modal>
+
+      <Modal open={isErrorModalOpen}>
+        <div className="modal-content">
+          <h2>Error</h2>
+          <p>{isError ? `${error.status} ${JSON.stringify(error.data)}` : 'An error occurred.'}</p>
+          <Button onClick={closeErrorModal}>Close</Button>
+        </div>
+      </Modal>
+
+      <Modal open={isSuccessModalOpen}>
+        <div className="modal-content">
+          <h2>Success</h2>
+          <p>'Receipt Updated Successfully'</p>
+          <Button onClick={closeSuccessModal}>Close</Button>
+        </div>
+      </Modal>
     </Box>
   );
 }

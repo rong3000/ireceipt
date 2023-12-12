@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,15 +14,17 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { connect } from 'react-redux';
-import { login, logout } from '../../redux/actions/authActions';
-import { Routes, Link as RouterLink, useNavigate } from 'react-router-dom';
+import { login, authInit } from '../../redux/actions/authActions';
+import { Routes, Route, useNavigate, Link as RouterLink } from 'react-router-dom';
+import { CircularProgress, Modal } from '@mui/material';
+
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="#">
-        https://ireceipts.au
+        https://ireceipts.au/
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -34,9 +36,29 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-function SignIn({ isLoggedIn, user, login, logout }) {
-  
+function SignIn({ isLoggedIn, user, login, authInit, error }) {
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const closeErrorModal = () => {
+    setIsErrorModalOpen(false);
+  };
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      setIsLoading(false);
+
+      navigate('/', { replace: true });
+    }
+    if (error) {
+      setIsLoading(false);
+
+      console.log(error);
+      setIsErrorModalOpen(true);
+    }
+  }, [isLoggedIn, error]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -45,9 +67,10 @@ function SignIn({ isLoggedIn, user, login, logout }) {
       email: data.get('email'),
       password: data.get('password'),
     });
-
+    authInit();
     login(data.get('email'), data.get('password'));
-    navigate('/', { replace: true });
+    setIsLoading(true);
+
   };
 
   return (
@@ -102,6 +125,11 @@ function SignIn({ isLoggedIn, user, login, logout }) {
               Sign In
             </Button>
             <Grid container>
+              {/* <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid> */}
               <Grid item>
                 <RouterLink to="/signup" variant="body2">
                   {"Don't have an account? Please Sign Up"}
@@ -109,6 +137,19 @@ function SignIn({ isLoggedIn, user, login, logout }) {
               </Grid>
             </Grid>
           </Box>
+          <Modal open={isLoading}>
+            <div className="modal-content">
+              <CircularProgress />
+            </div>
+          </Modal>
+
+          <Modal open={isErrorModalOpen}>
+            <div className="modal-content">
+              <h2>Error</h2>
+              <p>{error ? `${error}` : 'An error occurred.'}</p>
+              <Button onClick={closeErrorModal}>Close</Button>
+            </div>
+          </Modal>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
@@ -118,7 +159,8 @@ function SignIn({ isLoggedIn, user, login, logout }) {
 
 const mapStateToProps = (state) => ({
   isLoggedIn: state.authx.isLoggedIn,
-  user: state.authx.user
+  user: state.authx.user,
+  error: state.authx.error
 });
 
-export default connect(mapStateToProps, { login, logout })(SignIn)
+export default connect(mapStateToProps, { login, authInit })(SignIn)

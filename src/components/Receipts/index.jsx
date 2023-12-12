@@ -1,6 +1,10 @@
 import { connect } from 'react-redux'
 
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+
+import { login, logout, authInit } from '../../redux/actions/authActions';//done
 
 import { useGetReceiptsQuery } from '../../datamodel/rtkQuerySlice';
 
@@ -17,11 +21,14 @@ import {
   Avatar,
   Card,
   Container,
-  Tooltip,
-  CardActionArea
+    Tooltip,
 } from '@mui/material';
 
-const Receipts = ({ isLoggedIn }) => {
+const Receipts = ({ isLoggedIn, authInit }) => {
+
+  const location = useLocation();
+
+  const updateSuccess = location.state?.updateSuccess;
 
   const { data, error, isLoading, refetch, isUninitialized } = useGetReceiptsQuery(
     undefined,
@@ -33,7 +40,8 @@ const Receipts = ({ isLoggedIn }) => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    navigate('/login/', { replace: true });
+    authInit();
+    navigate('/login', { replace: true });
   };
 
   const onReceiptClick = (item) => {
@@ -113,7 +121,9 @@ const Receipts = ({ isLoggedIn }) => {
 };
 
 const mapStateToProps = (state) => ({
-  isLoggedIn: state.authx.isLoggedIn
+  isLoggedIn: state.authx.isLoggedIn,
+  user: state.authx.user
 });
 
-export default connect(mapStateToProps, {})(Receipts);
+export default connect(mapStateToProps, {authInit})(Receipts);
+
