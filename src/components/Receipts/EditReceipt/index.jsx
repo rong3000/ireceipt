@@ -21,6 +21,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useUpdateReceiptMutation } from '../../../datamodel/rtkQuerySlice';
 import { CircularProgress, Modal } from '@mui/material';
+import "./index.css";
 
 export default function EditReceipt() {
 

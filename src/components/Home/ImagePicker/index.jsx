@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { CircularProgress, Modal } from '@mui/material';
 import { useUploadReceiptMutation } from '../../../datamodel/rtkQuerySlice';
+import "./index.css"
 
 function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
   return centerCrop(

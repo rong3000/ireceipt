@@ -14,7 +14,7 @@ import { Routes, Route, useNavigate, Link as RouterLink } from 'react-router-dom
 import { connect } from 'react-redux';
 import { signup, authInit } from '../../redux/actions/authActions';
 import { CircularProgress, Modal } from '@mui/material';
-
+import "./index.css";
 
 function Copyright(props) {
   return (

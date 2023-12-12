@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import { login, authInit } from '../../redux/actions/authActions';
 import { Routes, Route, useNavigate, Link as RouterLink } from 'react-router-dom';
 import { CircularProgress, Modal } from '@mui/material';
-
+import "./index.jsx";
 
 function Copyright(props) {
   return (
