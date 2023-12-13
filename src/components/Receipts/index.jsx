@@ -24,7 +24,7 @@ import {
     Tooltip,
 } from '@mui/material';
 
-const Receipts = ({ isLoggedIn, authInit }) => {
+const Receipts = ({ isLoggedIn, user, authInit }) => {
 
   const location = useLocation();
 
@@ -36,6 +36,12 @@ const Receipts = ({ isLoggedIn, authInit }) => {
       skip: !isLoggedIn
     }
   );
+
+  useEffect(() => {
+    if (user !== null) {
+      refetch();
+    }
+  }, [user]);
 
   const navigate = useNavigate();
 
